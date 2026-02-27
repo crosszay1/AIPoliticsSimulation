@@ -1,12 +1,13 @@
 from google import genai
+from dotenv import load_dotenv
+import os
+
+
+load_dotenv() #load api key
 # The client gets the API key from the environment variable `GEMINI_API_KEY`.
-client = genai.Client(api_key="AIzaSyAAAc51Sz6PCcEoPBhEiOrQ-eDjxZNcj5M")
+token = os.getenv("GEMINI_API_KEY")
+client = genai.Client(api_key=token)
 
-
-response = client.models.generate_content(
-    model="gemini-3-flash-preview", contents="Explain how AI works in a few words"
-)
-print(response.text)
 
 
 class Agent():
@@ -15,7 +16,7 @@ class Agent():
         self.money = 50 #50 dollars
         self.Happiness = 50 #50%
         self.Health = 100 #100%
-        self.Socirty = None #the society the agent belongs to
+        self.Society = None #the society the agent belongs to
     def respond(self, prompt):
         response = client.models.generate_content(
             model="gemini-3-flash-preview", contents=prompt
@@ -64,4 +65,14 @@ class AITurn():
 
 
 def Init():
-    agent1 = Agent("bob")
+    agent1 = Agent("2.5-Flash")
+
+    society = Society()
+    society.add_agent(agent1)
+    society.CreateSociety()
+    
+    simulation = Simulation(society)
+    simulation.run_turn()
+
+
+Init()
